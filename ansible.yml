@@ -2,5 +2,5 @@
 - hosts: webservers
   connection: local
   tasks:
-   - name: Run jar
-     shell: java -jar target/cicd-0.0.1-SNAPSHOT.jar
+    - name: Run JAR
+      command: nohup java -jar target/cicd-0.0.1-SNAPSHOT.jar > /dev/null 2>&1 &
