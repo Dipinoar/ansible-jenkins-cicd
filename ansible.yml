@@ -10,12 +10,12 @@
       pip:
         name: docker-py
         state: present
-    - name: Start the Hello1 service
+    - name: Start the service
       docker_container:
-        name: cicdEjemplo
-        image: "dipinoar/cicdEJEMPLO:01"
+        name: contenedor
+        image: "dipinoar/nuevaimagen"
         state: started
         published_ports:
           - "0.0.0.0:8099:8099"
-      tags: hello1
+      tags: latest
   
