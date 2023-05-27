@@ -12,7 +12,7 @@ public class UserService {
 
     public User getById(Integer id) {
         user.setId(id);
-        user.setName("Vivek");
+        user.setName("DiegoXD");
         return user;
     }
 }
