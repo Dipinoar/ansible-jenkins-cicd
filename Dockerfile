@@ -5,10 +5,10 @@ FROM adoptopenjdk:11-jdk-hotspot
 WORKDIR /app
 
 # Copia el archivo JAR de la aplicación al directorio de trabajo en el contenedor
-COPY target/my-application.jar app.jar
+COPY target/cicd-0.0.1-SNAPSHOT.jar app.jar
 
 # Expone el puerto en el que se ejecuta la aplicación dentro del contenedor
-EXPOSE 8080
+EXPOSE 8099
 
 # Comando para ejecutar la aplicación cuando se inicie el contenedor
 CMD ["java", "-jar", "app.jar"]
