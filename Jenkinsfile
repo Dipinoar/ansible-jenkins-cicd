@@ -12,12 +12,13 @@ pipeline {
         )
     }
      stages {
-          
+          /*
           stage('Build Jars') {
             steps {
                 sh 'mvn clean package'
             }
-          }
+          }*/
+         
           stage('Run Spring Boot App') {
             steps {
                 script {
