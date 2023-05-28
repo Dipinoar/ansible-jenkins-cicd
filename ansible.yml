@@ -19,13 +19,13 @@
 
     - name: Pull Docker image
       docker_image:
-        name: dipinoar/suchimage:latest
+        name: dipinoar/nuevaimagen:latest
         source: pull
     
     - name: Start Docker container
       docker_container:
         name: contenedor
-        image: dipinoar/suchimage:latest
+        image: dipinoar/nuevaimagen:latest
         state: started
         published_ports:
           - "8099:8099"
@@ -47,7 +47,7 @@
 
     - name: Remove Docker image
       docker_image:
-        name: dipinoar/suchimage:latest
+        name: dipinoar/nuevaimagen:latest
         state: absent
 
     - name: Uninstall Docker
