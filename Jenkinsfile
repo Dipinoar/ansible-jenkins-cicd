@@ -1,10 +1,10 @@
 pipeline {
     agent any
-   /*
+   
     environment {
-        ANSIBLE_PRIVATE_KEY=credentials('ansible-private-key') 
+        ANSIBLE_PRIVATE_KEY=credentials('secretAnsible') 
         }
-   */
+   
     tools{
         maven 'maven'
     }
@@ -36,7 +36,7 @@ pipeline {
         
         stage('Run Ansible Playbook') {
             steps {
-               ansiblePlaybook become: true, becomeUser: 'camila', credentialsId: 'dev-server', inventory: 'dev.inv', playbook: 'ansible.yml' 
+               sh 'ansible-playbook -i dev.inv ansible.yml --extra-vars "ansible_become_pass=$ANSIBLE_PRIVATE_KEY"'
             }
         }
         
