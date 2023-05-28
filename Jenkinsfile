@@ -1,6 +1,9 @@
 pipeline {
     agent any
-    
+   
+    environment {
+        ANSIBLE_PRIVATE_KEY=credentials('ansible-private-key') 
+        }
     tools{
         maven 'maven'
     }
@@ -32,20 +35,7 @@ pipeline {
         
         stage('Run Ansible Playbook') {
             steps {
-                script {
-                    // Instalar el plugin Pipeline Utility Steps
-                    // Utilizar el paso 'withCredentials' para ocultar la contraseña
-                    withCredentials([usernamePassword(credentialsId: 'dev-server', passwordVariable: 'ANSIBLE_PASS', usernameVariable: 'ANSIBLE_USER')]) {
-                        ansiblePlaybook(
-                            playbook: 'ansible.yml',
-                            inventory: 'dev.inv',
-                            extras: '--ask-become-pass',
-                            sudoUser: env.ANSIBLE_USER,
-                            sudoPass: env.ANSIBLE_PASS
-                        )
-                    }
-                }
-            }
+                sh 'ansible-playbook -i dev.inv --private-key=$ANSIBLE_PRIVATE_KEY ansible.yml'
         }
         
         /*
