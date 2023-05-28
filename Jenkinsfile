@@ -35,7 +35,7 @@ pipeline {
         
         stage('Run Ansible Playbook') {
             steps {
-               ansiblePlaybook credentialsId: 'dev-server', disableHostKeyChecking: true, installation: 'ansible2', inventory: 'dev.inv', playbook: 'ansible.yml' 
+               ansiblePlaybook become: true, becomeUser: 'camila', credentialsId: 'dev-server', inventory: 'dev.inv', playbook: 'ansible.yml', vaultCredentialsId: 'ansible-private-key' 
             }
         }
         
