@@ -35,7 +35,8 @@ pipeline {
         
         stage('Run Ansible Playbook') {
             steps {
-                sh 'ansible-playbook -i dev.inv --private-key=$ANSIBLE_PRIVATE_KEY ansible.yml'
+                sh 'ansible-playbook -i dev.inv --private-key=$ANSIBLE_PRIVATE_KEY ansible.yml' 
+            }
         }
         
         /*
