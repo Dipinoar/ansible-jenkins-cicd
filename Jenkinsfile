@@ -30,9 +30,21 @@ pipeline {
            }
         }
         
-        stage('Deploy Docker Container') {
+        stage('Run Ansible Playbook') {
             steps {
-                ansiblePlaybook credentialsId: 'dev-server', installation: 'ansible2', disableHostKeyChecking: true, inventory: 'dev.inv', playbook: 'ansible.yml'
+                script {
+                    // Instalar el plugin Pipeline Utility Steps
+                    // Utilizar el paso 'withCredentials' para ocultar la contraseña
+                    withCredentials([usernamePassword(credentialsId: 'dev-server', passwordVariable: 'ANSIBLE_PASS', usernameVariable: 'ANSIBLE_USER')]) {
+                        ansiblePlaybook(
+                            playbook: 'ansible.yml',
+                            inventory: 'dev.inv',
+                            extras: '--ask-become-pass',
+                            sudoUser: env.ANSIBLE_USER,
+                            sudoPass: env.ANSIBLE_PASS
+                        )
+                    }
+                }
             }
         }
         
