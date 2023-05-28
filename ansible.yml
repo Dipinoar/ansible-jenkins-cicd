@@ -2,20 +2,66 @@
 - hosts: webservers
   become: true
   tasks:
-    - name: Install python pip
-      yum:
-        name: python-pip
+    - name: Install Docker
+      apt:
+        name: docker.io
         state: present
-    - name: Install docker-py python module
-      pip:
-        name: docker-py
-        state: present
-    - name: Start the service
+        update_cache: yes
+    
+    - name: Wait for 60 seconds
+      pause:
+        seconds: 60
+
+    - name: Start Docker service
+      service:
+        name: docker
+        state: started
+
+    - name: Pull Docker image
+      docker_image:
+        name: dipinoar/suchimage:latest
+        source: pull
+    
+    - name: Start Docker container
       docker_container:
         name: contenedor
-        image: "dipinoar/nuevaimagen"
+        image: dipinoar/suchimage:latest
         state: started
         published_ports:
-          - "0.0.0.0:8099:8099"
-      tags: latest
+          - "8099:8099"
+
   
+    - name: Wait for 60 seconds
+      pause:
+        seconds: 60
+
+    - name: Stop Docker container
+      docker_container:
+        name: contenedor
+        state: stopped
+
+    - name: Remove Docker container
+      docker_container:
+        name: contenedor
+        state: absent
+
+    - name: Remove Docker image
+      docker_image:
+        name: dipinoar/suchimage:latest
+        state: absent
+
+    - name: Uninstall Docker
+      apt:
+        name: docker.io
+        state: absent
+
+    - name: Verify Docker uninstallation
+      shell: sudo apt list --installed | grep -i docker
+      register: docker_uninstalled
+      ignore_errors: true
+
+    - name: Print Docker uninstallation status
+      debug:
+        msg: "Docker is {{ 'uninstalled' if docker_uninstalled.rc != 0 else 'still installed' }}"
+
+    
