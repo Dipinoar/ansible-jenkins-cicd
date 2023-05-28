@@ -35,7 +35,7 @@ pipeline {
         
         stage('Run Ansible Playbook') {
             steps {
-                sh 'ansible-playbook -i dev.inv --private-key=$ANSIBLE_PRIVATE_KEY ansible.yml' 
+               ansiblePlaybook credentialsId: 'dev-server', disableHostKeyChecking: true, installation: 'ansible2', inventory: 'dev.inv', playbook: 'ansible.yml' 
             }
         }
         
