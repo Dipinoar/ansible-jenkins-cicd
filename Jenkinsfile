@@ -23,9 +23,11 @@ pipeline {
         }
         
        stage('Push image') {
+           steps{
         withDockerRegistry([ credentialsId: "docker-hub-credentials", url: "" ]) {
         bat "docker push dipinoar/nuevaimagen"
         }
+           }
         }
         
         stage('Deploy Docker Container') {
