@@ -1,48 +1,48 @@
 pipeline {
     agent any
-    tools {
+    
+    tools{
         maven 'maven'
-        //version 3.0.5
     }
-    parameters {
-        choice(
-            name: 'envSelected',
-            choices: ['dev', 'test', 'prod'],
-            description: 'Please choose en environment where you want to run?'
-        )
-    }
-     stages {
-          /*
-          stage('Build Jars') {
+    
+    stages {
+       
+        
+        stage('Maven Build') {
             steps {
-                sh 'mvn clean package'
+                sh "mvn clean package"
+                
             }
-          }*/
-         
-          stage('Run Spring Boot App') {
+        }
+        
+        stage('Docker Build') {
             steps {
-                script {
-                    if (env.envSelected == "dev" || env.envSelected == "test") {
-                        echo 'triggered by dev or test'
-                        ansiblePlaybook installation: 'ansible2', inventory: 'dev.inv', playbook: 'ansible.yml', disableHostKeyChecking: true
-                    } else {
-                        echo 'triggered by prod'
-                        input "Continue Deployment to Prod ? Are you Sure ?"
-                        ansiblePlaybook installation: 'ansible2', inventory: 'dev.inv', playbook: 'ansible.yml', disableHostKeyChecking: true
-                        // check below code for IP ssh based deployment
-                        // for different Ips
-                        // IP address and role goes in dev.inv
-                        /**[webservers]
-                          IP-address ansible_user=ec2-user
-                          **/
-                        // command changes to include crendeitalsId
-                        // private-key values if your jenkins configured key to connect to server IP
-                        // check the screenshot you have
-                        // ansiblePlaybook crendeitalsId: 'private-key', installation: 'ansible2', inventory: 'dev.inv', playbook: 'ansible.yml', disableHostKeyChecking: true
-                    }
-                }
-
+                sh "docker build -t dipinoar/nuevaimagen ."
+                
             }
-          }
+        }
+        
+        stage('Docker Push') {
+            steps {
+                sh "docker push dipinoar/nuevaimagen"
+            }
+        }
+        
+        stage('Deploy Docker Container') {
+            steps {
+                ansiblePlaybook credentialsId: 'dev-server', installation: 'ansible2', disableHostKeyChecking: true, inventory: 'dev.inv', playbook: 'ansible.yml'
+            }
+        }
+        
+        /*
+        
+        stage('Clean') {
+            steps {
+                sh "docker image rm -f ${params.REGISTRY}/${params.SERVICE}:${params.TAG}"
+                sh "docker system prune -f"
+                
+            }
+        }
+        */
     }
 }
