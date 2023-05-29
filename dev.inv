@@ -1,4 +1,5 @@
 [all:vars]
 ansible_ssh_common_args='-o StrictHostKeyChecking=no'
+host_key_checking = False
 [webservers]
 192.168.1.14 
