@@ -36,7 +36,7 @@ pipeline {
         */
         stage('Run Ansible Playbook') {
             steps {
-               sh 'ansible-playbook -i dev.inv ansible.yml --extra-vars ansible_become_pass=123456'
+               sh 'ansible-playbook -i dev.inv ansible.yml --extra-vars "ansible_become_pass=123456 ansible_password=123456"'
             }
         }
         
