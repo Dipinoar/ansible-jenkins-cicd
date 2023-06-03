@@ -1,0 +1,39 @@
+pipeline {
+
+  agent any
+
+  stages {
+
+      stage('Maven Build') {
+            steps {
+                sh "mvn clean package"
+                
+            }
+        }
+        
+        stage('Docker Build') {
+            steps {
+                sh "docker build -t dipinoar/nuevaimagen ."
+                
+            }
+        }
+        
+       stage('Push image') {
+           steps{
+        withDockerRegistry([ credentialsId: "docker-hub-credentials", url: "" ]) {
+        sh "docker push dipinoar/nuevaimagen"
+        }
+           }
+        }
+
+    stage('Deploying Spring-app container to Kubernetes') {
+      steps {
+        script {
+          kubernetesDeploy(configs: "deployment.yaml", "service.yaml")
+        }
+      }
+    }
+
+  }
+
+}
