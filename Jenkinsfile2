@@ -8,6 +8,8 @@ pipeline {
     
 
   stages {
+  
+  /*
 
       stage('Maven Build') {
             steps {
@@ -30,7 +32,7 @@ pipeline {
         }
            }
         }
-
+*/
     stage('Deploying Spring-app container to Kubernetes') {
       steps {
         script {
