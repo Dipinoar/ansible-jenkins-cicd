@@ -36,7 +36,7 @@ pipeline {
     stage('Deploying Spring-app container to Kubernetes') {
       steps {
         script {
-          sh 'sudo docker ps'
+          sh 'docker ps'
           sh 'kubectl apply -f deployment.yaml' // Desplegar el archivo deployment.yaml
           sh 'kubectl apply -f service.yaml' // Desplegar el archivo service.yaml
         }
